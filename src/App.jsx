@@ -1,6 +1,30 @@
-import './App.css'
+import { useState } from "react";
+import toast from "react-hot-toast";
+import loginSchema from "../validators/login-validator";
+
+import "./App.css";
 
 function App() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const loginHandler = () => {
+    toast.loading("The information is checking...", {
+      duration: 1500,
+    });
+
+    const newUser = { username, password };
+    const result = loginSchema.safeParse(newUser);
+
+    setTimeout(() => {
+      if (result.success) {
+        toast.success("You have successfully logged in");
+      } else {
+        toast.error(result.error.issues[0].message);
+      }
+    }, 1500);
+  };
+
   return (
     <div className="login-page">
       <div className="login-glow login-glow-1" />
@@ -17,12 +41,22 @@ function App() {
           <form className="login-form">
             <div className="field-group">
               <label>Username</label>
-              <input type="text" placeholder="Enter your username" />
+              <input
+                type="text"
+                value={username}
+                placeholder="Enter your username"
+                onChange={(event) => setUsername(event.target.value)}
+              />
             </div>
 
             <div className="field-group">
               <label>Password</label>
-              <input type="password" placeholder="Enter your password" />
+              <input
+                type="password"
+                value={password}
+                placeholder="Enter your password"
+                onChange={(event) => setPassword(event.target.value)}
+              />
             </div>
 
             <div className="login-options">
@@ -33,8 +67,12 @@ function App() {
               <span className="forgot-link">Forgot password?</span>
             </div>
 
-            <button type="button" className="login-button">
-              Sign In
+            <button
+              type="button"
+              className="login-button"
+              onClick={loginHandler}
+            >
+              Log In
             </button>
           </form>
 
@@ -44,7 +82,7 @@ function App() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
