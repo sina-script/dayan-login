@@ -19,6 +19,8 @@ function App() {
     setTimeout(() => {
       if (result.success) {
         toast.success("You have successfully logged in");
+        setUsername("");
+        setPassword("");
       } else {
         toast.error(result.error.issues[0].message);
       }
